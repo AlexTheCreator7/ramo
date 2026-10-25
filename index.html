@@ -1,0 +1,278 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Para Angie</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --ground:#F6E4E1;
+    --ink:#2B1420;
+    --accent:#C8102E;
+    --plum:#5B2340;
+    --rose:#D98C93;
+    --nude:#E7B9A6;
+    --nude-2:#DBA592;
+    --gold:#B8925A;
+    --leaf:#5E7A55;
+    --paper:#FFF8F6;
+    --ease:cubic-bezier(.22,.8,.2,1);
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{
+    background:var(--ground);
+    color:var(--ink);
+    font-family:"Fraunces",Georgia,"Times New Roman",serif;
+    font-size:18px;
+    line-height:1.5;
+    -webkit-font-smoothing:antialiased;
+    overflow-x:hidden;
+  }
+
+  /* ---------- Cortina de entrada ---------- */
+  .curtain{
+    position:fixed;inset:0;z-index:10;
+    background:var(--ink);color:var(--ground);
+    display:flex;flex-direction:column;justify-content:flex-end;
+    padding:32px;gap:32px;
+    clip-path:inset(0 0 0 0);
+    transition:clip-path 1.3s var(--ease);
+  }
+  .curtain h1{
+    font-size:clamp(48px,9vw,128px);
+    font-weight:600;letter-spacing:-.04em;line-height:.92;
+    max-width:12ch;
+  }
+  body.open .curtain{clip-path:inset(0 0 0 100%);pointer-events:none}
+
+  .btn{
+    font:inherit;font-size:18px;font-weight:600;
+    background:var(--accent);color:var(--paper);
+    border:0;border-radius:999px;
+    padding:16px 36px;cursor:pointer;align-self:flex-start;
+    transition:transform .3s var(--ease);
+  }
+  .btn:hover{transform:translateX(4px)}
+  .btn:focus-visible{outline:3px solid var(--paper);outline-offset:3px}
+
+  /* ---------- Escena ---------- */
+  .stage{
+    min-height:100vh;
+    display:grid;
+    grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);
+    align-items:center;
+    gap:32px;
+    padding:24px 32px;
+  }
+  .bouquet{width:100%;max-height:94vh;display:block}
+  .bouquet svg{
+    width:100%;height:auto;max-height:94vh;display:block;overflow:visible;
+    clip-path:inset(0 100% 0 0);
+  }
+  body.play .bouquet svg{animation:wipe 2.6s var(--ease) .2s forwards}
+
+  .item{
+    opacity:0;transform:translateX(-16px);
+    transition:transform .35s var(--ease);
+    cursor:pointer;outline:none;
+  }
+  body.play .item{animation:slideIn 1s var(--ease) forwards;animation-delay:calc(.35s + var(--i) * .19s)}
+  .item:hover > g, .item:focus-visible > g{transform:translateX(5px)}
+  .item > g{transition:transform .35s var(--ease)}
+
+  .copy{display:flex;flex-direction:column;gap:32px;max-width:34rem}
+  .copy h2{
+    font-size:clamp(40px,5vw,78px);
+    font-weight:600;letter-spacing:-.035em;line-height:.95;
+  }
+  .reveal{clip-path:inset(0 100% 0 0)}
+  body.play .reveal{animation:wipe 1.2s var(--ease) forwards;animation-delay:var(--d,0s)}
+
+  .copy p{max-width:44ch}
+  .note{
+    min-height:3.2em;
+    font-size:15px;line-height:1.5;
+    color:var(--ink);
+  }
+  .note span{display:inline-block;clip-path:inset(0 0 0 0)}
+  .note span.in{animation:wipe .8s var(--ease)}
+  .sign{font-weight:600}
+  .again{
+    font:inherit;font-size:15px;font-weight:600;
+    background:none;border:0;color:var(--accent);cursor:pointer;
+    align-self:flex-start;padding:4px 0;
+    transition:transform .3s var(--ease);
+  }
+  .again:hover{transform:translateX(4px)}
+
+  @keyframes wipe{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+  @keyframes slideIn{to{opacity:1;transform:translateX(0)}}
+
+  @media (max-width:820px){
+    .stage{grid-template-columns:1fr;padding:16px 16px 64px;gap:16px}
+    .bouquet svg{max-height:62vh;margin:0 auto}
+    .curtain{padding:24px 16px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *,*::before,*::after{animation-duration:.01ms!important;animation-delay:0s!important;transition-duration:.01ms!important}
+  }
+</style>
+</head>
+<body>
+
+<section class="curtain" aria-label="Entrada">
+  <h1>Angie, tengo algo para ti.</h1>
+  <button class="btn" id="open">Ábrelo</button>
+</section>
+
+<main class="stage">
+  <div class="bouquet">
+    <svg id="svg" viewBox="0 0 600 780" role="img" aria-label="Un ramo hecho de maquillaje: brochas, labial, tinta de labios, base, una polvera y rosas, envuelto en papel con un lazo rojo"></svg>
+  </div>
+
+  <div class="copy">
+    <h2 class="reveal" style="--d:2.6s">Feliz día del maquillaje, mi&nbsp;amoor</h2>
+    <p class="reveal" style="--d:3.3s">No te traje un ramo normal. Te traje las cosas que te gustan :3, aunque para mí ya sales hermosa sin ninguna de ellas.</p>
+    <p class="reveal" style="--d:3.6s">Y este es solo el de la pantalla. El ramo de verdad te lo doy en persona.</p>
+    <p class="note reveal" style="--d:4.1s" aria-live="polite"><span id="note">Toca cualquier cosa del ramo.</span></p>
+    <p class="sign reveal" style="--d:4.5s">Con todo mi amor, Alessandro</p>
+    <button class="again reveal" style="--d:4.8s" id="again">Verlo otra vez</button>
+  </div>
+</main>
+
+<script>
+(() => {
+  const C = getComputedStyle(document.documentElement);
+  const v = n => C.getPropertyValue('--' + n).trim();
+
+  /* Piezas dibujadas de pie: la base en y=0, el cuerpo crece hacia arriba (y negativa). */
+  const T = {
+    brush: () => `
+      <path d="M-7 0 L7 0 L5 -190 L-5 -190 Z" fill="${v('ink')}"/>
+      <rect x="-9" y="-232" width="18" height="44" fill="${v('gold')}"/>
+      <path d="M-9 -232 C-24 -262 -17 -308 0 -324 C17 -308 24 -262 9 -232 Z" fill="${v('nude')}"/>
+      <path d="M-12 -280 C-10 -300 -6 -314 0 -324 C6 -314 10 -300 12 -280 C5 -286 -5 -286 -12 -280 Z" fill="${v('plum')}"/>`,
+    fan: () => `
+      <path d="M-6 0 L6 0 L4 -190 L-4 -190 Z" fill="${v('plum')}"/>
+      <rect x="-8" y="-230" width="16" height="40" fill="${v('gold')}"/>
+      <path d="M-8 -230 L-46 -292 Q0 -322 46 -292 L8 -230 Z" fill="${v('nude')}"/>
+      <path d="M-46 -292 Q0 -322 46 -292 L40 -283 Q0 -309 -40 -283 Z" fill="${v('paper')}"/>`,
+    lipstick: (bullet, kase) => `
+      <rect x="-17" y="-60" width="34" height="60" fill="${kase}"/>
+      <rect x="-17" y="-72" width="34" height="12" fill="${v('gold')}"/>
+      <rect x="-11" y="-94" width="22" height="22" fill="${v('gold')}"/>
+      <path d="M-10 -94 L-10 -124 L10 -140 L10 -94 Z" fill="${bullet}"/>
+      <rect x="-12" y="-52" width="5" height="44" fill="${v('paper')}" opacity=".35"/>`,
+    tint: () => `
+      <rect x="-12" y="-110" width="24" height="110" rx="7" fill="${v('accent')}"/>
+      <rect x="-6" y="-100" width="5" height="80" rx="2.5" fill="${v('paper')}" opacity=".45"/>
+      <rect x="-8" y="-124" width="16" height="14" fill="${v('gold')}"/>
+      <rect x="-1.5" y="-192" width="3" height="70" fill="${v('ink')}"/>
+      <path d="M-7 -190 L-7 -214 Q-2 -236 7 -224 L7 -190 Z" fill="${v('accent')}"/>`,
+    base: () => `
+      <rect x="-27" y="-92" width="54" height="92" rx="5" fill="${v('nude-2')}"/>
+      <rect x="-18" y="-62" width="36" height="30" fill="${v('paper')}"/>
+      <rect x="-12" y="-52" width="24" height="4" fill="${v('ink')}"/>
+      <rect x="-12" y="-43" width="16" height="3" fill="${v('ink')}"/>
+      <rect x="-9" y="-106" width="18" height="14" fill="${v('gold')}"/>
+      <rect x="-6" y="-126" width="12" height="20" fill="${v('ink')}"/>
+      <rect x="-6" y="-133" width="28" height="8" rx="2" fill="${v('ink')}"/>`,
+    compact: () => {
+      const petals = [...Array(10)].map((_,k)=>`<ellipse cx="0" cy="-118" rx="22" ry="40" fill="${k%2?v('accent'):v('rose')}" transform="rotate(${k*36} 0 -80)"/>`).join('');
+      return `${petals}
+      <circle cx="0" cy="-80" r="48" fill="${v('gold')}"/>
+      <circle cx="0" cy="-80" r="40" fill="${v('nude')}"/>
+      <circle cx="0" cy="-80" r="20" fill="${v('nude-2')}"/>
+      <path d="M-26 -100 A34 34 0 0 1 4 -114" stroke="${v('paper')}" stroke-width="4" fill="none" stroke-linecap="round"/>`;
+    },
+    rose: (c) => `
+      <circle cx="0" cy="-30" r="30" fill="${c}"/>
+      <path d="M0 -30 m-4 0 a4 4 0 1 1 8 0 a9 9 0 1 1 -16 0 a14 14 0 1 1 26 2 a19 19 0 1 1 -34 -6" stroke="${v('plum')}" stroke-width="2.4" fill="none" stroke-linecap="round"/>`
+  };
+
+  const stem = (lift, kind) => kind === 'handle'
+    ? ''
+    : `<rect x="-2.5" y="0" width="5" height="${lift}" fill="${v('leaf')}"/>
+       <path d="M0 ${lift*0.35} C18 ${lift*0.3} 30 ${lift*0.18} 34 ${lift*0.08} C18 ${lift*0.12} 6 ${lift*0.2} 0 ${lift*0.35} Z" fill="${v('leaf')}"/>`;
+
+  const handleExt = (lift, color) =>
+    `<rect x="-6" y="0" width="12" height="${lift}" fill="${color}"/>`;
+
+  /* x: orden de izquierda a derecha (define el orden de aparición). z: capa. */
+  const items = [
+    {x:0, z:1, a:-30, lift:150, kind:'handle', draw:()=>handleExt(150, v('ink'))+T.brush(), note:'Para los días en que te maquillas en dos minutos y aun así sales preciosa.'},
+    {x:1, z:0, a:-40, lift:260, draw:()=>T.rose(v('rose')), note:'Unas rosas de adelanto. Las de verdad te las llevo yo.'},
+    {x:2, z:3, a:-22, lift:320, draw:()=>T.rose(v('accent')), note:'Una rosa roja, porque hay cosas que no cambian.'},
+    {x:3, z:4, a:-14, lift:300, draw:()=>T.lipstick(v('accent'), v('ink')), note:'Rojo, para cuando quieras que el mundo se entere de que llegaste.'},
+    {x:4, z:10, a:-10, lift:290, draw:()=>T.tint(), note:'Tu tinta de labios, para que el color dure aunque te robe un beso.'},
+    {x:5, z:9, a:2,   lift:330, draw:()=>T.compact(), note:'Una polvera con espejo. Lo que ves ahí es lo que yo veo todos los días.'},
+    {x:6, z:6, a:11,  lift:300, draw:()=>T.rose(v('rose')), note:'Unas rosas de adelanto. Las de verdad te las llevo yo.'},
+    {x:7, z:4, a:18,  lift:300, draw:()=>T.base(), note:'Tu base, aunque tu piel no necesita cubrir nada.'},
+    {x:8, z:0, a:40,  lift:260, draw:()=>T.rose(v('accent')), note:'Una rosa roja, porque hay cosas que no cambian.'},
+    {x:9, z:1, a:30,  lift:160, kind:'handle', draw:()=>handleExt(160, v('plum'))+T.fan(), note:'Para el iluminador. Aunque tú brillas sola.'}
+  ];
+
+  const P = [300, 612]; // punto donde se juntan los tallos
+
+  const back = `
+    <path d="M150 384 L300 432 L450 384 L472 454 L128 454 Z" fill="${v('rose')}"/>`;
+
+  const wrap = `
+    <path d="M128 452 L472 452 L332 764 L268 764 Z" fill="${v('nude')}"/>
+    <path d="M300 452 L472 452 L332 764 L300 764 Z" fill="${v('nude-2')}"/>
+    <path d="M128 452 L472 452 L462 474 L138 474 Z" fill="${v('paper')}"/>
+    <path d="M300 566 C254 520 220 540 232 570 C244 598 280 584 300 566 Z" fill="${v('accent')}"/>
+    <path d="M300 566 C346 520 380 540 368 570 C356 598 320 584 300 566 Z" fill="${v('accent')}"/>
+    <path d="M296 572 L264 650 L282 642 L292 664 L304 574 Z" fill="${v('accent')}"/>
+    <path d="M304 572 L336 650 L318 642 L308 664 L296 574 Z" fill="${v('plum')}"/>
+    <circle cx="300" cy="568" r="12" fill="${v('plum')}"/>`;
+
+  const body = [...items].sort((a,b)=>a.z-b.z).map(it => `
+    <g class="item" style="--i:${it.x}" tabindex="0" role="button" aria-label="${it.note}" data-note="${it.note}">
+      <g>
+        <g transform="translate(${P[0]} ${P[1]}) rotate(${it.a}) translate(0 ${-it.lift})">
+          ${it.kind==='handle' ? '' : stem(it.lift)}
+          ${it.draw()}
+        </g>
+      </g>
+    </g>`).join('');
+
+  document.getElementById('svg').innerHTML = back + body + wrap;
+
+  /* ---------- Interacción ---------- */
+  const note = document.getElementById('note');
+  const show = text => {
+    note.classList.remove('in');
+    note.textContent = text;
+    void note.offsetWidth;
+    note.classList.add('in');
+  };
+  document.querySelectorAll('.item').forEach(el => {
+    el.addEventListener('click', () => show(el.dataset.note));
+    el.addEventListener('keydown', e => {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); show(el.dataset.note); }
+    });
+  });
+
+  const play = () => {
+    document.body.classList.remove('play');
+    void document.body.offsetWidth;
+    document.body.classList.add('play');
+  };
+
+  document.getElementById('open').addEventListener('click', () => {
+    document.body.classList.add('open');
+    setTimeout(play, 650);
+  });
+  document.getElementById('again').addEventListener('click', () => {
+    note.textContent = 'Toca cualquier cosa del ramo.';
+    play();
+  });
+})();
+</script>
+</body>
+</html>
